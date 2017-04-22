@@ -30,3 +30,8 @@ nbdist/
 
 ###  UserModule JARs ###
 user/lib/
+
+
+### GIS GitIgnore ###
+.mvn/timing.properties
+.idea/
