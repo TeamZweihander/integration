@@ -1,26 +1,16 @@
 package com.zweihander.navup.user.service;
 
-/**
- * Created by siphokazi on 2017/04/22.
- */
 import com.zweihander.navup.user.domain.User;
-public class UserService {
 
-    public User getUser(String name){
-        return new User(name, "test@gmail.com");
-    }
+public interface UserService {
 
-    /* TODO: Add a user to the DB */
-    public Boolean registerUser(User user){
-        return true;
-    }
+    User save(User user);
 
-    public Boolean updateUserName( String username, String userId){
-        return true;
-    }
+    User update(User user);
 
-    public Boolean removeUser(String userId){
-        return true;
-    }
+    User getById(Long id);
+    User getBy(String username);
 
+    void deleteById(Long id);
+    void deleteByUsername(String username);
 }
