@@ -5,43 +5,72 @@ package com.zweihander.navup.navigation.service;
  */
 import com.zweihander.navup.navigation.domain.POI;
 import com.zweihander.navup.navigation.repository.POIRepository;
+import org.hibernate.annotations.SourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
 @Service
-public class NavigationService implements INavigationService{
+//public class NavigationService implements INavigationService{
+public class NavigationService{
 
     @Autowired
     POIRepository poiRepository;
 
-    @Override
+
     public POI addPOI(POI location){
         return poiRepository.save(location);
     }
 
-    @Override
+    //@Override
     public POI modifyPOI(POI location){
-        return poiRepository.save(location);
+
+        POI tempLat = poiRepository.findByUsernameAndLongitude(location.getUsername(), location.getLongitude());
+        POI tempLong = poiRepository.findByUsernameAndLatitude(location.getUsername(), location.getLatitude());
+
+        if (  tempLat != null)
+        {
+            tempLat.setLatitude(location.getLatitude());
+            return poiRepository.save(tempLat);
+        }
+        else  if ( tempLong != null)
+        {
+            tempLong.setLongitude(location.getLongitude());
+            return poiRepository.save(tempLong);
+        }
+        else
+        {
+            return poiRepository.save(location);
+        }
     }
 
-    @Override
+
     public void deleteByID(Long id) {
         poiRepository.delete(id);
     }
 
-    @Override
-    public void deletePOI(POI poi){
-        poiRepository.delete(poi);
+
+    public boolean deletePOI(POI poi){
+        POI tmp = poiRepository.findByUsernameAndLongitudeAndLatitude(poi.getUsername(), poi.getLongitude(), poi.getLatitude());
+
+        if ( tmp != null){
+            poiRepository.delete(poi);
+            return true;
+        }
+        return false;
     }
 
-    @Override
+
     public POI getPOI(String username,double long_, double lat_){
-        return poiRepository.findByUsernameAndLongitudeAndLatitude(username,long_,lat_);
+
+        POI result = poiRepository.findByUsernameAndLongitudeAndLatitude(username,long_,lat_);
+
+        System.out.println("result: ======= "+result);
+        return result;
     }
 
-    @Override
+
     public ArrayList<POI> getAllPOIForUser(String username){
         return poiRepository.findAllByUsername(username);
     }

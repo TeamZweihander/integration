@@ -18,27 +18,40 @@ public class NavigationController
     NavigationService navigationService;
 
     @RequestMapping(value ="/addPOI", method = RequestMethod.POST)
-    public ResponseEntity<POI> addLocation(POI poi) {
-            navigationService.addPOI(poi);
-            return new ResponseEntity<POI>(poi,HttpStatus.CREATED);
+    public ResponseEntity<POI> addLocation(@RequestBody POI poi) {
+            POI result = navigationService.addPOI(poi);
+            return new ResponseEntity<>(result,HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/modifyPOI", method = RequestMethod.PUT)
-    public ResponseEntity modifyLocation(POI poi){
-        navigationService.modifyPOI( poi);
-        return ResponseEntity.ok("POI modified");
+    public ResponseEntity<POI> modifyLocation(@RequestBody POI poi){
+
+        System.out.println("=======================================");
+        System.out.println("User - " + poi.getUsername());
+        System.out.println("Lat - " + poi.getLatitude());
+        System.out.println("Long - " + poi.getLongitude());
+
+        POI result = navigationService.modifyPOI( poi);
+        return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/removePOI", method = RequestMethod.DELETE)
-    public ResponseEntity removeLocation(POI poi){
-        navigationService.deletePOI(poi);
-        return ResponseEntity.ok("POI deleted");
+    @RequestMapping(value = "/deletePOI/{long}/{lat}/{username}", method = RequestMethod.DELETE)
+    public ResponseEntity removeLocation(@PathVariable("username") String username, @PathVariable("long") double longitude,
+                                         @PathVariable("lat") double lat){
+        POI poi = navigationService.getPOI(username, longitude, lat);
+        if (navigationService.deletePOI(poi)){
+            return ResponseEntity.ok("POI deleted successfully");
+        }
+        else{
+            return ResponseEntity.ok("POI NOT FOUND");
+        }
     }
 
-    @RequestMapping(value = "/getPOI", method = RequestMethod.GET)
-    public ResponseEntity getPOI(POI poi){
-        navigationService.getPOI(poi.getUsername(), poi.getLongitude(), poi.getLatitude());
-        return ResponseEntity.ok("retrieved POI");
+    @RequestMapping(value = "/getPOI/{long}/{lat}/{username}", method = RequestMethod.GET)
+    public ResponseEntity<POI> getPOI(@PathVariable("username") String username, @PathVariable("long") double longitude,
+                                 @PathVariable("lat") double lat){
+        POI poi = navigationService.getPOI(username, longitude, lat);
+        return new ResponseEntity<>(poi,HttpStatus.FOUND);
     }
 
 }

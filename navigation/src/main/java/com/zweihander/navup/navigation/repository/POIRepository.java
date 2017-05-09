@@ -20,4 +20,8 @@ public interface POIRepository extends JpaRepository<POI, Long>{
     POI findByUsernameAndLongitudeAndLatitude(String username, double longitude, double latitude);
 
     ArrayList<POI> findAllByUsername(String username);
+
+    POI findByUsernameAndLongitude(String username, double longitude);
+
+    POI findByUsernameAndLatitude(String username, double latitude);
 }
