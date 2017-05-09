@@ -2,9 +2,14 @@ package com.zweihander.navup.user.domain;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Calendar;
 
-import javax.persistence.*;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.ColumnTransformer;
 
@@ -21,7 +26,7 @@ public class User implements Serializable {
     @Column(name="id", unique=true, nullable=false)
     protected Long id;
 
-    @Column(name="username", unique = true, length = 50, nullable=false)
+    @Column(name="username", unique=true, length = 50, nullable=false)
     protected String username;
 
     @Column(name="password", length = 100, nullable=false)
@@ -34,23 +39,23 @@ public class User implements Serializable {
     @Column(name="lastname", length = 50, nullable=false)
     protected String lastname;
 
-    @Column(name="email", length = 50, nullable=false)
+    @Column(name="email", unique=true, length = 50, nullable=false)
     protected String email;
+
+    @Column(name="cell_number", length = 10, nullable=false)
+    protected int cell_number;
 
     @Column(name="activated", columnDefinition="boolean NOT NULL DEFAULT true", nullable=false)
     protected boolean activated = true;
 
-    @Column(name="activated_key", length = 50, nullable=true)
-    protected String activated_key;
-
-    @Column(name="reset_key", length = 50, nullable=true)
-    protected String reset_key;
-
-    @Column(name="reset_date", nullable=true)
-    protected Date reset_date;
-
     @Column(name="is_admin", columnDefinition="boolean NOT NULL DEFAULT false", nullable=false)
     protected boolean is_admin;
+
+    @Column(name="last_modified_date", columnDefinition="date NOT NULL DEFAULT CURRENT_DATE", nullable=false)
+    protected Date last_modified_date;
+
+    @Column(name="created_date", columnDefinition="date NOT NULL DEFAULT CURRENT_DATE", nullable=false)
+    protected Date created_date;
 
     //Constructors
 
@@ -58,7 +63,50 @@ public class User implements Serializable {
         super();
     }
 
-    public User(Long id, String username, String password, String firstname, String lastname, String email) {
+    public User(String username, String password, String firstname, String lastname, String email, int cell_number) {
+        super();
+        this.username = username;
+        this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.cell_number = cell_number;
+        this.last_modified_date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+        this.created_date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+    }
+
+    public User(String username, String password, String firstname, String lastname, String email, int cell_number,
+                boolean activated, boolean is_admin) {
+        super();
+        this.username = username;
+        this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.cell_number = cell_number;
+        this.activated = activated;
+        this.is_admin = is_admin;
+        this.last_modified_date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+        this.created_date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+    }
+
+    public User(String username, String password, String firstname, String lastname, String email, int cell_number,
+                boolean activated, boolean is_admin, Date last_modified_date, Date created_date) {
+        super();
+        this.username = username;
+        this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.cell_number = cell_number;
+        this.activated = activated;
+        this.is_admin = is_admin;
+        this.last_modified_date = last_modified_date;
+        this.created_date = created_date;
+    }
+
+    public User(Long id, String username, String password, String firstname, String lastname, String email,
+                int cell_number, boolean activated, boolean is_admin, Date last_modified_date, Date created_date) {
         super();
         this.id = id;
         this.username = username;
@@ -66,40 +114,19 @@ public class User implements Serializable {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
-        this.activated = true;
-        this.is_admin = false;
-    }
-
-    public User(String username, String password, String firstname, String lastname, String email) {
-        super();
-        this.username = username;
-        this.password = password;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.activated = true;
-        this.is_admin = false;
-    }
-
-    public User(String username, String password, String firstname, String lastname, String email, String activated_key,
-                String reset_key) {
-        super();
-        this.username = username;
-        this.password = password;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.activated_key = activated_key;
-        this.reset_key = reset_key;
-        this.activated = true;
-        this.is_admin = false;
+        this.cell_number = cell_number;
+        this.activated = activated;
+        this.is_admin = is_admin;
+        this.last_modified_date = last_modified_date;
+        this.created_date = created_date;
     }
 
     @Override
     public String toString() {
-        return "User [username=" + username + ", password=" + password + ", firstname=" + firstname + ", lastname="
-                + lastname + ", email=" + email + ", activated=" + activated + ", is_admin=" + is_admin
-                + ", activated_key=" + activated_key + ", reset_key=" + reset_key + ", reset_date=" + reset_date + "]";
+        return "User [id=" + id + ", username=" + username + ", password=" + password + ", firstname=" + firstname
+                + ", lastname=" + lastname + ", email=" + email + ", cell_number=" + cell_number + ", activated="
+                + activated + ", is_admin=" + is_admin + ", last_modified_date=" + last_modified_date
+                + ", created_date=" + created_date + "]";
     }
 
     @Override
@@ -119,6 +146,10 @@ public class User implements Serializable {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -161,6 +192,14 @@ public class User implements Serializable {
         this.email = email;
     }
 
+    public int getCell_number() {
+        return cell_number;
+    }
+
+    public void setCell_number(int cell_number) {
+        this.cell_number = cell_number;
+    }
+
     public boolean isActivated() {
         return activated;
     }
@@ -173,29 +212,24 @@ public class User implements Serializable {
         return is_admin;
     }
 
-    public String getActivated_key() {
-        return activated_key;
+    public void setIs_admin(boolean is_admin) {
+        this.is_admin = is_admin;
     }
 
-    public void setActivated_key(String activated_key) {
-        this.activated_key = activated_key;
+    public Date getCreated_date() {
+        return created_date;
     }
 
-    public String getReset_key() {
-        return reset_key;
+    public void setCreated_date(Date created_date) {
+        this.created_date = created_date;
     }
 
-    public void setReset_key(String reset_key) {
-        this.reset_key = reset_key;
+    public Date getLast_modified_date() {
+        return last_modified_date;
     }
 
-    public Date getReset_date() {
-        return reset_date;
+    public void setLast_modified_date(Date last_modified_date) {
+        this.last_modified_date = last_modified_date;
     }
-
-    public void setReset_date(Date reset_date) {
-        this.reset_date = reset_date;
-    }
-
 
 }
