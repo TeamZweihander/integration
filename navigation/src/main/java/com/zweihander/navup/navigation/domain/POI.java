@@ -11,9 +11,11 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.ColumnTransformer;
 
-public class POI {
+@Entity
+@Table(name="poi", schema = "navigation_module")
+public class POI implements Serializable{
 
-
+    private static final long serialVersionUID = 6637087385433228063L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

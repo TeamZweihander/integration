@@ -6,15 +6,15 @@ package com.zweihander.navup.navigation.service;
 import com.zweihander.navup.navigation.domain.POI;
 import com.zweihander.navup.navigation.repository.POIRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
-
+@Service
 public class NavigationService implements INavigationService{
 
     @Autowired
     POIRepository poiRepository;
-
 
     @Override
     public POI addPOI(POI location){

@@ -9,16 +9,16 @@ import java.util.ArrayList;
  */
 public interface INavigationService {
 
-    public POI addPOI(POI location);
+     POI addPOI(POI location);
 
-    public POI modifyPOI(POI location);
+     POI modifyPOI(POI location);
 
-    public void deleteByID(Long id) ;
+     void deleteByID(Long id) ;
 
-    public void deletePOI(POI poi);
+     void deletePOI(POI poi);
 
-    public POI getPOI(String username,double long_, double lat_);
+     POI getPOI(String username,double long_, double lat_);
 
-    public ArrayList<POI> getAllPOIForUser(String username);
+     ArrayList<POI> getAllPOIForUser(String username);
 
 }

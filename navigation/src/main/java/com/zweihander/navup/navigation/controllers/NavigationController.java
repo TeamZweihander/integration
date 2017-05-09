@@ -6,6 +6,7 @@ import java.util.List;
 import com.zweihander.navup.navigation.domain.POI;
 import com.zweihander.navup.navigation.service.NavigationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +18,9 @@ public class NavigationController
     NavigationService navigationService;
 
     @RequestMapping(value ="/addPOI", method = RequestMethod.POST)
-    public ResponseEntity addLocation(POI poi) {
+    public ResponseEntity<POI> addLocation(POI poi) {
             navigationService.addPOI(poi);
-            return ResponseEntity.ok("POI added to database");
+            return new ResponseEntity<POI>(poi,HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/modifyPOI", method = RequestMethod.PUT)
