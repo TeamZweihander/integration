@@ -33,7 +33,7 @@ public class UserController {
 
     /////////////////////////////////////////////////
     @Autowired
-    HttpServletRequest request;
+    /*HttpServletRequest request;
 
 
     @RequestMapping(value = "/uploadfile", method = RequestMethod.POST)
@@ -57,7 +57,7 @@ public class UserController {
                 file.transferTo(dest);
             }
         }
-    }
+    }*/
 
 
 
