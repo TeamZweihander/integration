@@ -1,0 +1,6 @@
+username,password,firstname,lastname,email,cell_number,is_activated,is_admin
+TestA,TestAPass,A,Ate,ate@gmail.com,1822892784,TRUE,FALSE
+TestB,TestBPass,B,Bte,bte@gmail.com,820890780,TRUE,FALSE
+TestC,TestCPass,C,Cte,cte@gmail.com,1823002785,TRUE,FALSE
+TestD,TestDPass,D,Dte,dte@gmail.com,1802892764,TRUE,TRUE
+TestE,TestEPass,E,Ete,ete@gmial.com,788890780,TRUE,FALSE
