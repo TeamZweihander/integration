@@ -12,7 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan("com.zweihander.navup.user")
 public class UserApplication {
 
-    public static void main(String[] args){
-        SpringApplication.run(UserApplication.class, args);
-    }
+	public static void main(String[] args){
+		SpringApplication.run(UserApplication.class, args);
+	}
 }

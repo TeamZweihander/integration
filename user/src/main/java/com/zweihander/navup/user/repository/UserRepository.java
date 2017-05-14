@@ -11,9 +11,9 @@ import com.zweihander.navup.user.domain.User;
 @Repository
 public interface UserRepository extends JpaRepository<User,Long> {
 
-    @Query("SELECT u FROM User u WHERE u.username = ?1")
+	@Query("SELECT u FROM User u WHERE u.username = ?1")
     User findOne(String username);
-
-    @Query("SELECT u.password = crypt(?2,u.password) FROM User u WHERE u.username = ?1")
-    boolean authenticateUser(String username, String password);
+	
+	@Query("SELECT u.password = crypt(?2,u.password) FROM User u WHERE u.username = ?1")
+	boolean authenticateUser(String username, String password);
 }
