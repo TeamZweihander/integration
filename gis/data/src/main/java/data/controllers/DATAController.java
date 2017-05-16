@@ -18,7 +18,6 @@ public class DATAController {
             dataService.login();
         }
         String result = dataService.getLocation("DC:0B:34:F2:6E:56");
-        //String result = dataService.getLocation("F0:25:B7:B4:E1:1F");
         //return "hello world" ;
          return result;
     }
