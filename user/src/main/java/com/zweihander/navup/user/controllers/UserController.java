@@ -33,36 +33,36 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
-	
+
 //---------------------------------------------------------------------------------------------------
 //								USER specific requests
 //---------------------------------------------------------------------------------------------------
 	// Method to retrieve user contact details, accepts 'username' from notification module request
-	
-		@RequestMapping(value = "/contact/{username}", method = RequestMethod.GET)
-		public ResponseEntity<BaseDTO> getContactDetails(@PathVariable("username") String username)
-		{
-			User user = userService.getBy(username);
-			
-			if (user != null)
-			{
-				BaseDTO DTO;
-				
-				DTO = new NotificationResponseDTO(user);
 
-				return new ResponseEntity<BaseDTO>(DTO, HttpStatus.OK);
-			}
-			return new ResponseEntity<BaseDTO>(HttpStatus.NOT_FOUND);
+	@RequestMapping(value = "/contact/{username}", method = RequestMethod.GET)
+	public ResponseEntity<BaseDTO> getContactDetails(@PathVariable("username") String username)
+	{
+		User user = userService.getBy(username);
+
+		if (user != null)
+		{
+			BaseDTO DTO;
+
+			DTO = new NotificationResponseDTO(user);
+
+			return new ResponseEntity<BaseDTO>(DTO, HttpStatus.OK);
 		}
-		
+		return new ResponseEntity<BaseDTO>(HttpStatus.NOT_FOUND);
+	}
+
 	// Method to create user record in database, accepts user JSON object from View Module
-	
+
 	@RequestMapping(value = "/register" , method = RequestMethod.POST)
 	public ResponseEntity<BaseDTO> createUser(@RequestBody User user)
 	{
 		user = userService.save(user);
 		BaseDTO DTO;
-		
+
 		if(user.isIs_admin())
 		{
 			DTO = new AdminDTO(user);
@@ -70,19 +70,13 @@ public class UserController {
 		else{
 			DTO = new UserDTO(user);
 		}
-		
-		
+
+
 		return new ResponseEntity<BaseDTO>(DTO, HttpStatus.CREATED);
 	}
-	
-	/*@RequestMapping(value = "", method=RequestMethod.POST)
-	public ResponseEntity<String> sendUsername(User user)
-	{
-		return new ResponseEntity<String>(user.getUsername(), HttpStatus.OK);
-	}*/
-	
+
 	//Method to update user record in database, accepts user JSON object from View module
-	
+
 	@RequestMapping(value = "/updateUser" , method = RequestMethod.PUT)
 	public ResponseEntity<BaseDTO> updateUser(@RequestBody User user)
 	{
@@ -91,7 +85,7 @@ public class UserController {
 		{
 			user = userService.update(user);
 			BaseDTO DTO;
-			
+
 			if(user.isIs_admin())
 			{
 				DTO = new AdminDTO(user);
@@ -99,38 +93,38 @@ public class UserController {
 			else{
 				DTO = new UserDTO(user);
 			}
-			
-			return new ResponseEntity<BaseDTO>(DTO, HttpStatus.OK);
-		}
-		return new ResponseEntity<BaseDTO>(HttpStatus.NOT_FOUND);	
-	}
-	
-	//Method to retrieve user record identified using the 'username' field from database
-	
-	@RequestMapping(value = "/findUser/{username}", method = RequestMethod.GET)
-	public ResponseEntity<BaseDTO> findUser(@PathVariable("username") String username)
-	{
-		User user = userService.getBy(username);
-		
-		if (user != null)
-		{
-			BaseDTO DTO;
-			
-			if(user.isIs_admin())
-			{
-				DTO = new AdminDTO(user);
-			}
-			else{
-				DTO = new UserDTO(user);
-			}
-			
+
 			return new ResponseEntity<BaseDTO>(DTO, HttpStatus.OK);
 		}
 		return new ResponseEntity<BaseDTO>(HttpStatus.NOT_FOUND);
 	}
-	
+
+	//Method to retrieve user record identified using the 'username' field from database
+
+	@RequestMapping(value = "/findUser/{username}", method = RequestMethod.GET)
+	public ResponseEntity<BaseDTO> findUser(@PathVariable("username") String username)
+	{
+		User user = userService.getBy(username);
+
+		if (user != null)
+		{
+			BaseDTO DTO;
+
+			if(user.isIs_admin())
+			{
+				DTO = new AdminDTO(user);
+			}
+			else{
+				DTO = new UserDTO(user);
+			}
+
+			return new ResponseEntity<BaseDTO>(DTO, HttpStatus.OK);
+		}
+		return new ResponseEntity<BaseDTO>(HttpStatus.NOT_FOUND);
+	}
+
 	// Method to delete user record identified by 'username' field from database
-		
+
 	@RequestMapping(value = "/deleteUser/{username}", method = RequestMethod.DELETE)
 	public ResponseEntity<BaseDTO> deleteUser(@PathVariable("username") String username)
 	{
@@ -141,10 +135,10 @@ public class UserController {
 			return new ResponseEntity<BaseDTO>(HttpStatus.OK);
 		}
 		return new ResponseEntity<BaseDTO>(HttpStatus.NOT_FOUND);
-	}	
-	
+	}
+
 	// Method to check if username and password combo are correct
-	
+
 	@RequestMapping(value = "/authenticate" , method = RequestMethod.POST)
 	public ResponseEntity<BaseDTO> testLog(@RequestBody User user)
 	{
@@ -155,7 +149,7 @@ public class UserController {
 			{
 				BaseDTO DTO;
 				DTO = new LogInResponseDTO(temp);
-				
+
 				return new ResponseEntity<BaseDTO>(DTO, HttpStatus.ACCEPTED);
 			}
 			else
@@ -163,73 +157,73 @@ public class UserController {
 				return new ResponseEntity<BaseDTO>(HttpStatus.FORBIDDEN);
 			}
 		}
-		return new ResponseEntity<BaseDTO>(HttpStatus.NOT_FOUND);	
+		return new ResponseEntity<BaseDTO>(HttpStatus.NOT_FOUND);
 	}
-	
-	
+
+
 //---------------------------------------------------------------------------------------------------
 //								ADMINISTRATOR specific requests
 //---------------------------------------------------------------------------------------------------
-	
+
 	// Method for bulk creation of users
-		
-		@RequestMapping(value = "/admin/registerUsers" , method = RequestMethod.POST)
-		public ResponseEntity<List<User>> createUsers()
-		{
-			try{
+
+	@RequestMapping(value = "/admin/registerUsers" , method = RequestMethod.POST)
+	public ResponseEntity<List<User>> createUsers()
+	{
+		try{
 			String csvFilename = "src/main/resources/File.csv";
 			if (!csvFilename.isEmpty()) {
-            	List<User> users = readCSV(csvFilename);
-    			
-    			users = userService.save(users);
-    			return new ResponseEntity<List<User>>(users, HttpStatus.CREATED);
-	        } else {
-	        	return new ResponseEntity<List<User>>(HttpStatus.BAD_REQUEST);
-	        }
-			}catch (Exception e)
-			{
-				System.out.println(e);
-				return new ResponseEntity<List<User>>(HttpStatus.CONFLICT);
+				List<User> users = readCSV(csvFilename);
+
+				users = userService.save(users);
+				return new ResponseEntity<List<User>>(users, HttpStatus.CREATED);
+			} else {
+				return new ResponseEntity<List<User>>(HttpStatus.BAD_REQUEST);
 			}
-		}
-		
-		// Method for bulk deletion of users
-		
-		@RequestMapping(value = "/admin/deleteUsers", method = RequestMethod.DELETE)
-		public ResponseEntity<User> deleteUsers()
+		}catch (Exception e)
 		{
-			String csvFilename = "src/main/resources/File.csv";
-			List<User> users = readCSV(csvFilename);
-			
-			Iterator<User> iterator = users.listIterator();
-			while(iterator.hasNext())
-			{
-				if(userService.getBy(iterator.next().getUsername()) == null)
-				{
-					return new ResponseEntity<User>(iterator.next(),HttpStatus.NOT_FOUND);
-				}
-			}
-			userService.deleteBy(users);
-			return new ResponseEntity<User>(HttpStatus.OK);
+			System.out.println(e);
+			return new ResponseEntity<List<User>>(HttpStatus.CONFLICT);
 		}
-	
-		//Method to retrieve all user records from database
-		
-		@RequestMapping(value = "/admin/findAll", method = RequestMethod.GET)
-		public ResponseEntity <List<User>> findAll()
+	}
+
+	// Method for bulk deletion of users
+
+	@RequestMapping(value = "/admin/deleteUsers", method = RequestMethod.DELETE)
+	public ResponseEntity<User> deleteUsers()
+	{
+		String csvFilename = "src/main/resources/File.csv";
+		List<User> users = readCSV(csvFilename);
+
+		Iterator<User> iterator = users.listIterator();
+		while(iterator.hasNext())
 		{
-			List<User> users = userService.getAll();
-			if (users != null)
+			if(userService.getBy(iterator.next().getUsername()) == null)
 			{
-				return new ResponseEntity<List<User>>(users, HttpStatus.OK);
+				return new ResponseEntity<User>(iterator.next(),HttpStatus.NOT_FOUND);
 			}
-			return new ResponseEntity<List<User>>(HttpStatus.NOT_FOUND);
 		}
-		
+		userService.deleteBy(users);
+		return new ResponseEntity<User>(HttpStatus.OK);
+	}
+
+	//Method to retrieve all user records from database
+
+	@RequestMapping(value = "/admin/findAll", method = RequestMethod.GET)
+	public ResponseEntity <List<User>> findAll()
+	{
+		List<User> users = userService.getAll();
+		if (users != null)
+		{
+			return new ResponseEntity<List<User>>(users, HttpStatus.OK);
+		}
+		return new ResponseEntity<List<User>>(HttpStatus.NOT_FOUND);
+	}
+
 	//---------------------------------------------------------------------------------------------------
-		
+
 	// Method to retrieve user record identified by 'id' field from database 
-	
+
 	@RequestMapping(value = "/admin/getById/{id}", method = RequestMethod.GET)
 	public ResponseEntity<User> getUser(@PathVariable("id") Long id)
 	{
@@ -240,9 +234,9 @@ public class UserController {
 		}
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
-	
+
 	// Method to delete user record identified by 'id' field from database 
-	
+
 	@RequestMapping(value = "/admin/deleteById/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<User> deleteById(@PathVariable("id") Long id)
 	{
@@ -254,17 +248,17 @@ public class UserController {
 		}
 		return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
 	}
-	
+
 	public List<User> readCSV(String csvFile)
 	{
-		
+
 		CSVReader reader = null;
 		List<User> csvContent = new ArrayList<User>();
-		
+
 		try{
 			reader = new CSVReader(new FileReader(csvFile),',','"',1);
 			String[] line;
-			
+
 			while ((line = reader.readNext()) != null){
 				csvContent.add(new User(line[0], line[1], line[2], line[3], line[4], line[5], Boolean.parseBoolean(line[6]), Boolean.parseBoolean(line[7])));
 				System.out.println(line[0] + "," + line[1] + "," + line[2] + "," + line[3] + "," + line[4] + "," + line[5] + "," + line[6] + "," + line[7] + "\n");
